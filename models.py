@@ -37,8 +37,8 @@ class product_product(models.Model):
                 res = super(product_product, self).create(vals)
 		companies = self.env['res.company'].search([])
 		for company in companies:
-			account_config_setting = self.env['account.config.settings'].search([('company_id','=',company.id)])
-			if account_config_setting.default_purchase_tax_id:
+			account_config_setting = self.env['account.config.settings'].search([])
+			if account_config_setting.default_purchase_tax_id and account_config_setting.company_id.id == company.id:
 				tax_values = {
 					'company_id': company_id.id,
 					'tax_id': account_config_setting.default_purchase_tax_id.id
