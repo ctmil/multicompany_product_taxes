@@ -14,8 +14,15 @@ _logger = logging.getLogger(__name__)
 class product_taxes(models.Model):
         _name = 'product.taxes'
 	_description = 'Impuestos del producto'
+
+	@api.one
+	def _compute_name(self):
+		return_value = ''
+		if self.company_id and self.tax_id:
+			return_value = self.company_id.name + ' - ' + self.tax_id.name
+		self.name = return_value
         
-	name = fields.Char('Name')
+	name = fields.Char('Name',compute=_compute_name)
 	product_id = fields.Many2one('product.product',string='Product')
 	company_id = fields.Many2one('res.company',string='Company')
 	tax_id = fields.Many2one('account.tax',string='Tax')

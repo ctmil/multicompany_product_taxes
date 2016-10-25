@@ -7,10 +7,9 @@
       <field name="model">product.product</field>
       <field name="inherit_id" ref="product.product_normal_form_view"/>
       <field name="arch" type="xml">
-		<field name="item_ids" position="after">
+		<field name="barcode" position="after">
 			<field name="product_taxes_ids" >
-				<tree string="Taxes">
-					<field name="name" />
+				<tree string="Taxes" editable="bottom">
 					<field name="company_id" />
 					<field name="tax_id" />
 				</tree>
