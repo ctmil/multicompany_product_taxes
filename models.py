@@ -11,6 +11,12 @@ from openerp.fields import Date as newdate
 #Get the logger
 _logger = logging.getLogger(__name__)
 
+class res_company(models.Model):
+	_inherit = 'res.company'
+
+	
+	default_purchase_tax_id = fields.Many2one('account.tax',string='Tax')
+
 class product_taxes(models.Model):
         _name = 'product.taxes'
 	_description = 'Impuestos del producto'
@@ -37,13 +43,11 @@ class product_product(models.Model):
                 res = super(product_product, self).create(vals)
 		companies = self.env['res.company'].search([])
 		for company in companies:
-			account_config_settings = self.env['account.config.settings'].search([])
-			for setting in account_config_settings:
-				if setting.default_purchase_tax_id and setting.company_id.id == company.id:
-					tax_values = {
-						'company_id': company.id,
-						'tax_id': setting.default_purchase_tax_id.id
-						}
-					return_id = self.env['product.taxes'].create(tax_values)
+			if company.default_purchase_tax_id:
+				tax_values = {
+					'company_id': company.id,
+					'tax_id': company.default_purchase_tax_id.id
+					}
+				return_id = self.env['product.taxes'].create(tax_values)
 		return res
 		

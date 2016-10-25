@@ -18,6 +18,16 @@
       </field>
     </record>
 
+    <record id="res_company_taxes" model="ir.ui.view">
+      <field name="name">res.company.taxes</field>
+      <field name="model">res.company</field>
+      <field name="inherit_id" ref="base.view_company_form"/>
+      <field name="arch" type="xml">
+		<field name="parent_id" position="after">
+			<field name="default_purchase_tax_id" />
+		</field>
+      </field>
+    </record>
 
   </data>
 </openerp>
