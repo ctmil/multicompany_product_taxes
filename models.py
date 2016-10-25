@@ -33,6 +33,26 @@ class product_taxes(models.Model):
 	company_id = fields.Many2one('res.company',string='Company')
 	tax_id = fields.Many2one('account.tax',string='Tax')
 
+class account_invoice_line(models.Model):
+	_inherit = 'account.invoice.line'
+
+	@api.model
+	def create(self,vals):
+		invoice_line_tax_ids = vals.get('invoice_line_tax_ids',False)
+		product_id = vals.get('product_id',False)
+		invoice_id = vals.get('invoice_id',False)
+		if invoice_line_tax_ids and product_id and invoice_id:
+			invoice = self.env['account.invoice'].browse(invoice_id)
+			product_tax = self.env['product.taxes'].search([('product_id','=',product_id),\
+					('company_id','=',invoice.company_id.id)])
+			if product_tax:
+				return_value = []
+				for invoice_line_tax_id in invoice_line_tax_ids:
+					return_value.append([6,0,[product_tax.tax_id.id]])		
+				vals['invoice_line_tax_ids'] = return_value	
+                return super(account_invoice_line, self).create(vals)
+		
+
 class product_product(models.Model):
 	_inherit = 'product.product'
 
