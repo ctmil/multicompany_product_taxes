@@ -31,3 +31,18 @@ class product_product(models.Model):
 	_inherit = 'product.product'
 
 	product_taxes_ids = fields.One2many(comodel_name='product.taxes',inverse_name='product_id')
+
+        @api.model
+        def create(self, vals):
+                res = super(product_product, self).create(vals)
+		companies = self.env['res.company'].search([])
+		for company in companies:
+			account_config_setting = self.env['account.config.setting'].search([('company_id','=',company.id)])
+			if account_config_setting.default_purchase_tax_id:
+				tax_values = {
+					'company_id': company_id.id,
+					'tax_id': account_config_setting.default_purchase_tax_id.id
+					}
+				return_id = self.env['product.taxes'].create(tax_values)
+		return res
+		
