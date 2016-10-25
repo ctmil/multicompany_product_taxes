@@ -45,6 +45,7 @@ class product_product(models.Model):
 		for company in companies:
 			if company.default_purchase_tax_id:
 				tax_values = {
+					'product_id': res.id,
 					'company_id': company.id,
 					'tax_id': company.default_purchase_tax_id.id
 					}
