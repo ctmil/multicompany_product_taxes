@@ -11,7 +11,7 @@
 			<field name="product_taxes_ids" >
 				<tree string="Taxes" editable="bottom">
 					<field name="company_id" />
-					<field name="tax_id" />
+					<field name="tax_id" domain="[('type_tax_use','=','purchase')]"/>
 				</tree>
 			</field>
 		</field>
