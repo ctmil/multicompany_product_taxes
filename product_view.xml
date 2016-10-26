@@ -24,7 +24,7 @@
       <field name="inherit_id" ref="base.view_company_form"/>
       <field name="arch" type="xml">
 		<field name="parent_id" position="after">
-			<field name="default_purchase_tax_id" />
+			<field name="default_purchase_tax_id" domain="[('type_tax_use','=','purchase')]"/>
 		</field>
       </field>
     </record>
