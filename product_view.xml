@@ -40,6 +40,16 @@
       </field>
     </record>
 
+    <record id="account_invoice_taxes" model="ir.ui.view">
+      <field name="name">account.invoice.taxes</field>
+      <field name="model">account.invoice</field>
+      <field name="inherit_id" ref="account.invoice_supplier_form"/>
+      <field name="arch" type="xml">
+		<xpath expr="//field[@name='invoice_line_tax_ids']" position="attributes">
+			<attribute name="readonly">1</attribute>
+		</xpath>
+      </field>
+    </record>
 
   </data>
 </openerp>
