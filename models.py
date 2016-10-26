@@ -14,8 +14,13 @@ _logger = logging.getLogger(__name__)
 class res_company(models.Model):
 	_inherit = 'res.company'
 
+	@api.constrains('default_purchase_tax_id')
+	def _check_purchase_tax(self):
+		if self.id != self.default_purchase_tax_id.company_id.id:
+			raise ValidationError("Impuesto seleccionado no corresponde a la empresa")
+		
 	
-	default_purchase_tax_id = fields.Many2one('account.tax',string='Tax')
+	default_purchase_tax_id = fields.Many2one('account.tax',string='Impuesto Default en Compras')
 
 class product_taxes(models.Model):
         _name = 'product.taxes'
