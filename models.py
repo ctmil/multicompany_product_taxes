@@ -33,6 +33,23 @@ class product_taxes(models.Model):
 	company_id = fields.Many2one('res.company',string='Company')
 	tax_id = fields.Many2one('account.tax',string='Tax')
 
+class purchase_order_line(models.Model):
+	_inherit = 'purchase.order.line'
+
+	@api.model
+	def create(self,vals):
+		product_id = vals.get('product_id',False)
+		order_id = vals.get('order_id',False)
+		if product_id and invoice_id:
+			invoice = self.env['purchase.order'].browse(invoice_id)
+			product_tax = self.env['product.taxes'].search([('product_id','=',product_id),\
+					('company_id','=',invoice.company_id.id)])
+			if product_tax:
+				return_value = [[6,0,[product_tax.tax_id.id]]]
+				vals['taxes_id'] = return_value	
+                return super(purchase_order_line, self).create(vals)
+	
+
 class account_invoice_line(models.Model):
 	_inherit = 'account.invoice.line'
 
