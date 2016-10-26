@@ -38,10 +38,9 @@ class account_invoice_line(models.Model):
 
 	@api.model
 	def create(self,vals):
-		invoice_line_tax_ids = vals.get('invoice_line_tax_ids',False)
 		product_id = vals.get('product_id',False)
 		invoice_id = vals.get('invoice_id',False)
-		if invoice_line_tax_ids and product_id and invoice_id:
+		if product_id and invoice_id:
 			invoice = self.env['account.invoice'].browse(invoice_id)
 			product_tax = self.env['product.taxes'].search([('product_id','=',product_id),\
 					('company_id','=',invoice.company_id.id)])
