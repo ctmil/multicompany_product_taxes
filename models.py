@@ -45,9 +45,7 @@ class account_invoice_line(models.Model):
 			product_tax = self.env['product.taxes'].search([('product_id','=',product_id),\
 					('company_id','=',invoice.company_id.id)])
 			if product_tax:
-				return_value = []
-				for invoice_line_tax_id in invoice_line_tax_ids:
-					return_value.append([6,0,[product_tax.tax_id.id]])		
+				return_value = [[6,0,[product_tax.tax_id.id]]]
 				vals['invoice_line_tax_ids'] = return_value	
                 return super(account_invoice_line, self).create(vals)
 		
