@@ -40,10 +40,10 @@ class purchase_order_line(models.Model):
 	def create(self,vals):
 		product_id = vals.get('product_id',False)
 		order_id = vals.get('order_id',False)
-		if product_id and invoice_id:
-			invoice = self.env['purchase.order'].browse(invoice_id)
+		if product_id and order_id:
+			order = self.env['purchase.order'].browse(order_id)
 			product_tax = self.env['product.taxes'].search([('product_id','=',product_id),\
-					('company_id','=',invoice.company_id.id)])
+					('company_id','=',order.company_id.id)])
 			if product_tax:
 				return_value = [[6,0,[product_tax.tax_id.id]]]
 				vals['taxes_id'] = return_value	
@@ -52,6 +52,11 @@ class purchase_order_line(models.Model):
 
 class account_invoice_line(models.Model):
 	_inherit = 'account.invoice.line'
+
+	invoice_line_tax_ids = fields.Many2many('account.tax','account_invoice_line_tax', 'invoice_line_id', 'tax_id',\
+	        string='Taxes', domain=[('type_tax_use','!=','none'), '|', ('active', '=', False), ('active', '=', True)],\
+		 oldname='invoice_line_tax_id',readonly=True)
+
 
 	@api.model
 	def create(self,vals):
