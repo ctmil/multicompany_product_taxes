@@ -28,7 +28,7 @@
     'depends': ['product','account','purchase'],
     'data': [
 	'product_view.xml',
-	#'security/ir.model.access.csv',
+	'security/ir.model.access.csv',
 	#'security/security.xml'
     ],
     'qweb': [
