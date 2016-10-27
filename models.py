@@ -16,8 +16,9 @@ class res_company(models.Model):
 
 	@api.constrains('default_purchase_tax_id')
 	def _check_purchase_tax(self):
-		if self.id != self.default_purchase_tax_id.company_id.id:
-			raise ValidationError("Impuesto seleccionado no corresponde a la empresa")
+		if self.default_purchase_tax_id:
+			if self.id != self.default_purchase_tax_id.company_id.id:
+				raise ValidationError("Impuesto seleccionado no corresponde a la empresa")
 		
 	
 	default_purchase_tax_id = fields.Many2one('account.tax',string='Impuesto Default en Compras')
