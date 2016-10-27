@@ -26,6 +26,13 @@ class product_taxes(models.Model):
         _name = 'product.taxes'
 	_description = 'Impuestos del producto'
 
+	@api.constrains('product_id','company_id','tax_id')
+	def _check_tax_unique(self):
+		cnt = self.env['product.taxes'].search([('company_id','=',self.company_id.id),\
+			('tax_id','=',self.tax_id.id),('product_id','=',self.product_id.id)])
+		if cnt and len(cnt) > 1:
+			raise ValidationError('Solo se debe tener un impuesto por producto por empresa')
+
 	@api.one
 	def _compute_name(self):
 		return_value = ''
