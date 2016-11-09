@@ -19,9 +19,16 @@ class res_company(models.Model):
 		if self.default_purchase_tax_id:
 			if self.id != self.default_purchase_tax_id.company_id.id:
 				raise ValidationError("Impuesto seleccionado no corresponde a la empresa")
+
+	@api.constrains('default_sale_tax_id')
+	def _check_purchase_tax(self):
+		if self.default_sale_tax_id:
+			if self.id != self.default_sale_tax_id.company_id.id:
+				raise ValidationError("Impuesto seleccionado no corresponde a la empresa")
 		
 	
 	default_purchase_tax_id = fields.Many2one('account.tax',string='Impuesto Default en Compras')
+	default_sale_tax_id = fields.Many2one('account.tax',string='Impuesto Default en Ventas')
 
 class product_taxes(models.Model):
         _name = 'product.taxes'
@@ -45,6 +52,7 @@ class product_taxes(models.Model):
 	product_id = fields.Many2one('product.product',string='Product')
 	company_id = fields.Many2one('res.company',string='Company')
 	tax_id = fields.Many2one('account.tax',string='Tax')
+	sale_tax_id = fields.Many2one('account.tax',string='Sale Tax')
 
 class purchase_order_line(models.Model):
 	_inherit = 'purchase.order.line'
