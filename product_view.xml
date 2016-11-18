@@ -29,7 +29,7 @@
       </field>
     </record>
     <!-- xpath expr="//form[@string='Supplier Information']/field[@name='pricelist_ids']/tree[@string='Pricelist']/field[@name='price']" -->
-    <record id="purchase_order_taxes" model="ir.ui.view">
+    <!-- record id="purchase_order_taxes" model="ir.ui.view">
       <field name="name">purchase.order.taxes</field>
       <field name="model">purchase.order</field>
       <field name="inherit_id" ref="purchase.purchase_order_form"/>
@@ -38,7 +38,7 @@
 			<attribute name="readonly">1</attribute>
 		</xpath>
       </field>
-    </record>
+    </record -->
 
     <!-- record id="account_invoice_taxes" model="ir.ui.view">
       <field name="name">account.invoice.taxes</field>
