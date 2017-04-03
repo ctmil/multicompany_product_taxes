@@ -30,6 +30,54 @@
 		</field>
       </field>
     </record>
+
+    <record id="equivalent_taxes_tree" model="ir.ui.view">
+      <field name="name">equivalent.taxes.tree</field>
+      <field name="model">account.tax.equivalent</field>
+      <field name="arch" type="xml">
+		<tree string="Impuestos Equivalentes" editable="bottom">
+			<field name="name" />
+			<field name="company_id" />
+			<field name="equivalent_tax_id" />
+			<field name="tax_id" />
+		</tree>
+      </field>
+    </record>
+
+        <record id="action_account_tax_equivalent" model="ir.actions.act_window">
+            <field name="name">Impuestos Equivalentes</field>
+            <field name="res_model">account.tax.equivalent</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <!-- field name="domain">['|',('author_id', '=', user.partner_id.id)]</field -->
+            <!-- field name="search_view_id" ref="view_as_stock_move_filter"/ -->
+        </record>
+
+        <menuitem id="menuitem_tax_equivalent"
+                parent="account.account_account_menu"
+                action="action_account_tax_equivalent"
+                name="Impuestos Equivalentes" />
+
+
+    <record id="tax_equivalent_taxes" model="ir.ui.view">
+      <field name="name">account.tax.equivalent.taxes</field>
+      <field name="model">account.tax</field>
+      <field name="inherit_id" ref="account.view_tax_form"/>
+      <field name="arch" type="xml">
+		<field name="children_tax_ids" position="before">
+			<group string="Impuestos Equivalentes">
+				<field name="company_taxes">
+					<tree string="Impuestos equivalentes" editable="bottom">
+						<field name="company_id" />
+						<field name="name" />
+						<field name="equivalent_tax_id" />
+					</tree>
+				</field>
+			</group>
+		</field>
+      </field>
+    </record>
+
     <!-- xpath expr="//form[@string='Supplier Information']/field[@name='pricelist_ids']/tree[@string='Pricelist']/field[@name='price']" -->
     <!-- record id="purchase_order_taxes" model="ir.ui.view">
       <field name="name">purchase.order.taxes</field>

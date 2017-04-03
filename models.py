@@ -54,6 +54,20 @@ class product_taxes(models.Model):
 	tax_id = fields.Many2one('account.tax',string='Tax')
 	sale_tax_id = fields.Many2one('account.tax',string='Sale Tax')
 
+class account_tax(models.Model):
+	_inherit = 'account.tax'
+
+	company_taxes = fields.One2many(comodel_name='account.tax.equivalent',inverse_name='tax_id')
+
+class account_tax_equivalent(models.Model):
+	_name = 'account.tax.equivalent'
+	_description = 'account.tax.equivalent'
+
+	name = fields.Char('Nombre impuesto')
+	company_id = fields.Many2one('res.company',string='Company')
+	tax_id = fields.Many2one('account.tax',string='Tax')
+	equivalent_tax_id = fields.Many2one('account.tax',string='Equivalent Tax')
+
 class purchase_order_line(models.Model):
 	_inherit = 'purchase.order.line'
 
