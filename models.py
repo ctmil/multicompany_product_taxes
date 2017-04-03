@@ -75,16 +75,17 @@ class purchase_order_line(models.Model):
 	def create(self,vals):
 		product_id = vals.get('product_id',False)
 		order_id = vals.get('order_id',False)
-		if product_id and order_id:
+		product = self.env['product.product'].browse(product_id)
+		if product_id and order_id and product.supplier_taxes_id:
 			order = self.env['purchase.order'].browse(order_id)
-			product_tax = self.env['product.taxes'].search([('product_id','=',product_id),\
+			product_tax = self.env['account.tax.equivalent'].search([('tax_id','=',product.supplier_taxes_id.ids[0]),\
 					('company_id','=',order.company_id.id)])
 			if product_tax:
-				return_value = [[6,0,[product_tax.tax_id.id]]]
+				return_value = [[6,0,[product_tax.equivalent_tax_id.id]]]
 				vals['taxes_id'] = return_value
-			if not product_tax:
-				return_value = [[6,0,[order.company_id.default_purchase_tax_id.id]]]
-				vals['taxes_id'] = return_value
+			#if not product_tax:
+			#	return_value = [[6,0,[order.company_id.default_purchase_tax_id.id]]]
+			#	vals['taxes_id'] = return_value
                 return super(purchase_order_line, self).create(vals)
 	
 
@@ -105,7 +106,7 @@ class account_invoice_line(models.Model):
 			product_tax = self.env['product.taxes'].search([('product_id','=',product_id),\
 					('company_id','=',invoice.company_id.id)])
 			if product_tax:
-				return_value = [[6,0,[product_tax.tax_id.id]]]
+				return_value = [[6,0,[product_tax.equivalent_tax_id.id]]]
 				vals['invoice_line_tax_ids'] = return_value	
                 return super(account_invoice_line, self).create(vals)
 		
