@@ -67,7 +67,10 @@ class purchase_order_line(models.Model):
 					('company_id','=',order.company_id.id)])
 			if product_tax:
 				return_value = [[6,0,[product_tax.tax_id.id]]]
-				vals['taxes_id'] = return_value	
+				vals['taxes_id'] = return_value
+			if not product_tax:
+				return_value = [[6,0,[order.company_id.default_purchase_tax_id.id]]]
+				vals['taxes_id'] = return_value
                 return super(purchase_order_line, self).create(vals)
 	
 
