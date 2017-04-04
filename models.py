@@ -77,7 +77,13 @@ class account_tax_equivalent(models.Model):
 	def constrains_equivalent(self):
 		if self.company_id and self.equivalent_tax_id:
 			if self.company_id.id != self.equivalent_tax_id.company_id.id:
-				raise ValidationError('Se seleccionó un impuesto que no corresponde\na la compañía  en la que se está trabajando')
+				raise ValidationError('Se seleccionó un impuesto que no corresponde a la compañía  en la que se está trabajando')
+
+			if self.tax_id.type_tax_use != self.equivalent_tax_id.type_tax_use: 
+				raise ValidationError('Se seleccionó un impuesto que no corresponde al uso del impuesto equivalente')
+
+			if self.tax_id.amount != self.equivalent_tax_id.amount: 
+				raise ValidationError('Se seleccionó un impuesto con % diferente al impuesto equivalente')
 
 	name = fields.Char('Nombre impuesto',compute=_compute_name)
 	company_id = fields.Many2one('res.company',string='Company',required=True)
