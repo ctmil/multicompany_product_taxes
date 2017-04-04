@@ -2,7 +2,7 @@
 <openerp>
   <data>
 
-    <record id="product_product_taxes" model="ir.ui.view">
+    <!-- record id="product_product_taxes" model="ir.ui.view">
       <field name="name">product.product.taxes</field>
       <field name="model">product.product</field>
       <field name="inherit_id" ref="product.product_normal_form_view"/>
@@ -17,7 +17,7 @@
 			</field>
 		</field>
       </field>
-    </record>
+    </record -->
 
     <record id="res_company_taxes" model="ir.ui.view">
       <field name="name">res.company.taxes</field>
@@ -36,7 +36,7 @@
       <field name="model">account.tax.equivalent</field>
       <field name="arch" type="xml">
 		<tree string="Impuestos Equivalentes" editable="bottom">
-			<field name="name" />
+			<field name="name" readolnly="1"/>
 			<field name="company_id" />
 			<field name="equivalent_tax_id" />
 			<field name="tax_id" />

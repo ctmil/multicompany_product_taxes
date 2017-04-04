@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from openerp import models, fields, api, _
 from openerp.osv import osv
 from openerp.exceptions import except_orm, ValidationError
@@ -63,10 +65,24 @@ class account_tax_equivalent(models.Model):
 	_name = 'account.tax.equivalent'
 	_description = 'account.tax.equivalent'
 
-	name = fields.Char('Nombre impuesto')
-	company_id = fields.Many2one('res.company',string='Company')
+	@api.one
+	def _compute_name(self):
+		return_value = ''
+		if self.company_id and self.equivalent_tax_id:
+			return_value = self.company_id.name + ' - ' + self.equivalent_tax_id.name
+		self.name = return_value
+
+	@api.one
+	@api.constrains('company_id','equivalent_tax_id')
+	def constrains_equivalent(self):
+		if self.company_id and self.equivalent_tax_id:
+			if self.company_id.id != self.equivalent_tax_id.company_id.id:
+				raise ValidationError('Se seleccionó un impuesto que no corresponde\na la compañía  en la que se está trabajando')
+
+	name = fields.Char('Nombre impuesto',compute=_compute_name)
+	company_id = fields.Many2one('res.company',string='Company',required=True)
 	tax_id = fields.Many2one('account.tax',string='Tax')
-	equivalent_tax_id = fields.Many2one('account.tax',string='Equivalent Tax')
+	equivalent_tax_id = fields.Many2one('account.tax',string='Equivalent Tax',required=True)
 
 class purchase_order_line(models.Model):
 	_inherit = 'purchase.order.line'
