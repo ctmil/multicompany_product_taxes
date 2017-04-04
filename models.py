@@ -101,9 +101,10 @@ class account_invoice_line(models.Model):
 	def create(self,vals):
 		product_id = vals.get('product_id',False)
 		invoice_id = vals.get('invoice_id',False)
-		if product_id and invoice_id:
+		product = self.env['product.product'].browse(product_id)
+		if product_id and invoice_id and product.supplier_taxes_id:
 			invoice = self.env['account.invoice'].browse(invoice_id)
-			product_tax = self.env['product.taxes'].search([('product_id','=',product_id),\
+			product_tax = self.env['account.tax.equivalent'].search([('tax_id','=',product.supplier_taxes_id.ids[0]),\
 					('company_id','=',invoice.company_id.id)])
 			if product_tax:
 				return_value = [[6,0,[product_tax.equivalent_tax_id.id]]]
